@@ -1,4 +1,4 @@
-# LLM Text Detection Robustness Under Iterative Paraphrasing (Local, No API Keys)
+# LLM Text Detection Robustness Under Iterative Paraphrasing 
 
 This project builds an end-to-end pipeline to study how well a classical detector can distinguish **human-written** vs **LLM-generated** text under **iterative paraphrasing**. The main result demonstrates *signature erosion*: a detector trained on original text degrades as paraphrasing increases.
 
