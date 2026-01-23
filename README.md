@@ -77,6 +77,24 @@ Interpretation:
 Saved:
 - `results/feature_drift_test.csv`
 
+### Hardness-Aware Robustness (Easy/Medium/Hard Buckets)
+
+We stratify the fixed test set into **Easy / Medium / Hard** buckets using the baseline detector’s **confidence margin** on **P0_test** (hard = low confidence).  
+**Finding:** Hard samples degrade first under paraphrasing, and simplified paraphrasing amplifies the gap.
+
+**Example (F1 on test):**
+- **Hard bucket:** 0.7368 (P0) → 0.6383 (P1 standard) → 0.3871 (P1 simplified)
+- **Medium bucket:** 0.8947 (P0) → 0.8718 (P1 standard) → 0.6875 (P1 simplified)
+- **Easy bucket:** remains high across stages
+
+Saved:
+- `results/hardness_buckets_test.csv`
+- `results/hardness_buckets_test.json`
+
+Plots:
+- `figures/f1_hardness_standard.png`
+- `figures/f1_hardness_simplified.png`
+
 ---
 
 ## Tech Stack
