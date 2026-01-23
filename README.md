@@ -119,6 +119,7 @@ LLM_Text_Detection/
 │   └── f1_vs_paraphrase_test.png
 ├── requirements.txt
 └── README.md
+```
 ---
 ## Setup (Quick Start)
 
