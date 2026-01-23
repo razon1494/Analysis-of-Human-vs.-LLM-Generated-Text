@@ -114,154 +114,47 @@ LLM_Text_Detection/
 
 ## Setup
 
-### 1) Create a virtual environment
-**Windows (PowerShell):**
-```bash
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-
-2) Install & verify Ollama (local)
-
-Pull the model used in this project:
-
-ollama pull llama3.1:8b
-
-
-Verify the Ollama API is available:
-
-curl http://localhost:11434/api/tags
-
-Reproduce the Pipeline (End-to-End)
-Step A — Collect human text (Wikipedia)
-
-Collects 500 human-written paragraphs (100–200 words) and saves them to JSONL.
-
-python src/collect_human_wikipedia.py
-
-
-Output:
-
-data/raw_human/human.jsonl
-
-Step B — Generate LLM text (Ollama)
-
-Generates 500 LLM paragraphs locally using Ollama (matching the same length constraints).
-
-python src/generate_llm_ollama.py
-
-
-Output:
-
-data/raw_llm/llm.jsonl
-
-Step C — Build balanced dataset (P0)
-
-Filters 100–200 words and deduplicates within each class (human vs llm), then builds the P0 dataset.
-
-python src/build_dataset.py
-
-
-Outputs:
-
-data/p0/p0.jsonl (1000 rows total: 500 human + 500 llm)
-
-data/processed/all.jsonl (optional combined output)
-
-If you ever see duplicate-ID split overlap issues, run this once:
-
-python src/repair_ids.py
-
-
-Then rename p0_fixed.jsonl → p0.jsonl and regenerate splits.
-
-Step D — Create fixed train/val/test splits (by ID)
-
-Creates stable split lists to avoid leakage.
-
-python src/make_splits.py
-
-
-Outputs:
-
-data/splits/train_ids.txt (800)
-
-data/splits/val_ids.txt (100)
-
-data/splits/test_ids.txt (100)
-
-Step E — Train baseline detector (TF-IDF + Logistic Regression)
-
-Trains on P0 train split, evaluates on val/test, and saves the model.
-
-python src/train_detector.py
-
-
-Outputs:
-
-results/vectorizer.joblib
-
-results/model.joblib
-
-results/metrics_p0.json
-
-Step F — Create paraphrased test sets (P1_test and P2_test)
-
-Paraphrases only the test set (100 samples) to quickly measure robustness.
-
-P1_test: paraphrased once
-
-P2_test: paraphrased twice (iterative paraphrasing)
-
-python src/paraphrase_test_only.py
-
-
-Outputs:
-
-data/p1/p1_test.jsonl
-
-data/p2/p2_test.jsonl
-
-Step G — Evaluate robustness on P0_test vs P1_test vs P2_test
-
-Runs the saved P0 detector on all three test conditions.
-
-python src/evaluate_robustness.py
-
-
-Outputs:
-
-results/robustness_test.json
-
-results/robustness_test.csv
-
-Step H — Linguistic drift features + plots
-
-Computes shallow drift features and generates the robustness plots.
-
-python src/feature_drift.py
-python src/plot_robustness.py
-
-
-Outputs:
-
-results/feature_drift_test.csv
-
-figures/accuracy_vs_paraphrase_test.png
-
-figures/f1_vs_paraphrase_test.png
-
-Notes / Limitations
-
-This project focuses on robustness under paraphrasing, not on building the best detector possible.
-
-Paraphrases are generated locally using Ollama; different local models may produce different degradation magnitudes.
-
-Easy extensions:
-
-paraphrase full dataset (P1/P2 for train+test)
-
-add a non-LLM paraphrase method (e.g., back-translation)
-
-compare against neural detectors
-
+## Project Structure
+
+```text
+LLM_Text_Detection/
+├── src/
+│   ├── collect_human_wikipedia.py      # collect human-written paragraphs (Wikipedia)
+│   ├── generate_llm_ollama.py          # generate LLM paragraphs locally (Ollama)
+│   ├── build_dataset.py                # filter + per-class dedup + build P0 dataset
+│   ├── repair_ids.py                   # fix duplicate IDs (if needed)
+│   ├── make_splits.py                  # fixed train/val/test IDs
+│   ├── train_detector.py               # baseline TF-IDF + Logistic Regression
+│   ├── paraphrase_test_only.py         # create P1_test and P2_test (100 rows each)
+│   ├── evaluate_robustness.py          # evaluate P0_test / P1_test / P2_test
+│   ├── feature_drift.py                # compute shallow linguistic drift features
+│   └── plot_robustness.py              # plot accuracy and F1 under paraphrasing
+├── data/
+│   ├── raw_human/
+│   │   └── human.jsonl
+│   ├── raw_llm/
+│   │   └── llm.jsonl
+│   ├── processed/
+│   │   └── all.jsonl                   # optional combined view
+│   ├── p0/
+│   │   └── p0.jsonl                    # balanced 1000 rows
+│   ├── p1/
+│   │   └── p1_test.jsonl
+│   ├── p2/
+│   │   └── p2_test.jsonl
+│   └── splits/
+│       ├── train_ids.txt
+│       ├── val_ids.txt
+│       └── test_ids.txt
+├── results/
+│   ├── vectorizer.joblib               # saved TF-IDF vectorizer
+│   ├── model.joblib                    # saved logistic regression model
+│   ├── metrics_p0.json                 # baseline metrics on P0
+│   ├── robustness_test.json            # robustness metrics on P0/P1/P2 (test-only)
+│   ├── robustness_test.csv             # robustness metrics (CSV)
+│   └── feature_drift_test.csv          # drift features across P0/P1/P2 (test-only)
+├── figures/
+│   ├── accuracy_vs_paraphrase_test.png
+│   └── f1_vs_paraphrase_test.png
+├── requirements.txt
+└── README.md
