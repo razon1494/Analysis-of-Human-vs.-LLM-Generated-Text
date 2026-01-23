@@ -22,7 +22,7 @@ This project builds an end-to-end pipeline to study how well a classical detecto
 - **Accuracy:** 0.8600  
 - **F1:** 0.8833  
 
-### Robustness Under Iterative Paraphrasing (Test Only)
+### Robustness Under Iterative Paraphrasing 
 
 | Condition | n | Accuracy | Precision | Recall | F1 |
 |---|---:|---:|---:|---:|---:|
@@ -37,6 +37,18 @@ Saved:
 Plots:
 - `figures/accuracy_vs_paraphrase_test.png`
 - `figures/f1_vs_paraphrase_test.png`
+
+### Dual-Track Robustness (Test Set): Standard vs Simplified Paraphrasing
+
+We evaluate the same detector on the fixed test set under:
+- **Standard paraphrasing** (P1/P2)
+- **Simplified, non-expert paraphrasing** (P1/P2), designed to amplify stylistic drift (simpler vocabulary, shorter sentences)
+
+**Key finding:** Simplified paraphrasing causes substantially stronger signature erosion than standard paraphrasing.
+
+| Condition | n | Accuracy | Precision | Recall | F1 |
+|---|---:|---:|---:|---:|---:|
+| P0_test | 100 | 0.8600 |_
 
 ---
 
