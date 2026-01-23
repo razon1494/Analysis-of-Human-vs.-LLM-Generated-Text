@@ -172,14 +172,14 @@ pip install -r requirements.txt
 ---
 
 ## Reproduce (Quick)
-python .\src\collect_human_wikipedia.py
-python .\src\generate_llm_ollama.py
-python .\src\build_dataset.py
-python .\src\make_splits.py
-python .\src\train_detector.py
-python .\src\evaluate_robustness.py
-python .\src\feature_drift.py
-python .\src\generate_paraphrase_test_simplified.py
-python .\src\evaluate_robustness_test_dualtrack.py
-python .\src\plot_robustness_test_dualtrack.py
+- python .\src\collect_human_wikipedia.py
+- python .\src\generate_llm_ollama.py
+- python .\src\build_dataset.py
+- python .\src\make_splits.py
+- python .\src\train_detector.py
+- python .\src\evaluate_robustness.py
+- python .\src\feature_drift.py
+- python .\src\generate_paraphrase_test_simplified.py
+- python .\src\evaluate_robustness_test_dualtrack.py
+- python .\src\plot_robustness_test_dualtrack.py
 
