@@ -48,7 +48,14 @@ We evaluate the same detector on the fixed test set under:
 
 | Condition | n | Accuracy | Precision | Recall | F1 |
 |---|---:|---:|---:|---:|---:|
-| P0_test | 100 | 0.8600 |_
+| P0_test | 100 | 0.8600 | 0.9138 | 0.8548 | 0.8833 |
+| P1_test_standard | 100 | 0.7700 | 0.7826 | 0.8710 | 0.8244 |
+| P2_test_standard | 100 | 0.7500 | 0.7534 | 0.8871 | 0.8148 |
+| P1_test_simplified | 100 | 0.6800 | 0.8571 | 0.5806 | 0.6923 |
+| P2_test_simplified | 100 | 0.6700 | 0.9143 | 0.5161 | 0.6598 |
+
+![Accuracy Dual Track](figures/accuracy_test_dualtrack.png)
+![F1 Dual Track](figures/f1_test_dualtrack.png)
 
 ---
 
@@ -69,12 +76,6 @@ Interpretation:
 
 Saved:
 - `results/feature_drift_test.csv`
-
----
-
-## Why This Matters
-
-Many detectors pick up brittle surface patterns. Under paraphrasing (a realistic distribution shift), those patterns drift and detection performance drops. This project quantifies that erosion and provides a reproducible pipeline to study robustness.
 
 ---
 
