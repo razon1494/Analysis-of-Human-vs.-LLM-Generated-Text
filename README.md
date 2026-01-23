@@ -74,45 +74,6 @@ Many detectors pick up brittle surface patterns. Under paraphrasing (a realistic
 - matplotlib (plots)
 
 ---
-## Project Structure
-
-LLM_Text_Detection/
-├─ src/
-│ ├─ collect_human_wikipedia.py # collect human-written paragraphs (Wikipedia)
-│ ├─ generate_llm_ollama.py # generate LLM paragraphs locally (Ollama)
-│ ├─ build_dataset.py # filter + per-class dedup + build P0 dataset
-│ ├─ repair_ids.py # fix duplicate IDs (if needed)
-│ ├─ make_splits.py # fixed train/val/test IDs
-│ ├─ train_detector.py # baseline TF-IDF + Logistic Regression
-│ ├─ paraphrase_test_only.py # create P1_test and P2_test (100 rows each)
-│ ├─ evaluate_robustness.py # evaluate P0_test / P1_test / P2_test
-│ ├─ feature_drift.py # compute shallow linguistic drift features
-│ └─ plot_robustness.py # plot accuracy and F1 under paraphrasing
-├─ data/
-│ ├─ raw_human/ # human.jsonl
-│ ├─ raw_llm/ # llm.jsonl
-│ ├─ processed/ # all.jsonl (optional combined view)
-│ ├─ p0/ # p0.jsonl (balanced 1000 rows)
-│ ├─ p1/ # p1_test.jsonl
-│ ├─ p2/ # p2_test.jsonl
-│ └─ splits/ # train_ids.txt, val_ids.txt, test_ids.txt
-├─ results/
-│ ├─ vectorizer.joblib # saved TF-IDF vectorizer
-│ ├─ model.joblib # saved logistic regression model
-│ ├─ metrics_p0.json # baseline metrics on P0
-│ ├─ robustness_test.json # robustness metrics on P0/P1/P2 (test-only)
-│ ├─ robustness_test.csv # robustness metrics (CSV)
-│ └─ feature_drift_test.csv # drift features across P0/P1/P2 (test-only)
-├─ figures/
-│ ├─ accuracy_vs_paraphrase_test.png
-│ └─ f1_vs_paraphrase_test.png
-├─ requirements.txt
-└─ README.md
-
-
----
-
-## Setup
 
 ## Project Structure
 
@@ -158,3 +119,51 @@ LLM_Text_Detection/
 │   └── f1_vs_paraphrase_test.png
 ├── requirements.txt
 └── README.md
+---
+## Setup (Quick Start)
+
+### Prerequisites
+- Python 3.11+
+- Ollama installed (local; no API keys)
+
+### 1) Create environment + install dependencies
+
+**Windows (PowerShell):**
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -U pip
+pip install -r requirements.txt
+
+---
+
+## Notes / Limitations
+
+- This project focuses on **robustness under paraphrasing** rather than maximizing detector accuracy.
+- Paraphrases are generated locally using **Ollama**; changing the local model may change the magnitude of performance drop.
+- The robustness study uses **test-only paraphrasing** for speed. A full P1/P2 (train+test) version is a natural extension.
+
+---
+
+## Possible Extensions
+
+- Paraphrase the full dataset (P1/P2 for train + val + test) and compare:
+  - train on P0 vs train on P0+P1 (augmentation) vs train on P1
+- Add a non-LLM paraphrase method (e.g., back-translation) and compare robustness
+- Evaluate multiple detector families:
+  - character n-grams, stylometric features, lightweight neural baselines
+- Add a “hardness-aware” breakdown:
+  - performance vs lexical diversity / sentence length bins
+
+---
+
+## Reproducibility
+
+- All key outputs (dataset, splits, metrics, figures) are written to disk under:
+  - `data/`, `results/`, and `figures/`
+- The saved artifacts enable re-running evaluation without re-training:
+  - `results/vectorizer.joblib`
+  - `results/model.joblib`
+
+---
+
