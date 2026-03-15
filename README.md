@@ -1,7 +1,7 @@
 # Hardness-Aware Robustness of LLM Text Detection Under Iterative Paraphrasing
 
 > **Mohammad Arifur Rahman** · rahman.arif.cse@gmail.com  
-> Companion code for the arXiv preprint — *Hardness-Aware Robustness of LLM-Text Detection Under Iterative Paraphrasing*
+*Hardness-Aware Robustness of LLM-Text Detection Under Iterative Paraphrasing*
 
 This project builds a fully local, end-to-end pipeline to study how well a classical detector can distinguish **human-written** from **LLM-generated** text when the LLM text is iteratively paraphrased. The central finding is **signature erosion**: detector performance degrades as paraphrasing increases, and the degradation is highly non-uniform — *hard* samples (those near the decision boundary) collapse first and fastest.
 
