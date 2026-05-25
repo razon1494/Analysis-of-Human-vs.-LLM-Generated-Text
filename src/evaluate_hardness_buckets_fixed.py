@@ -31,7 +31,7 @@ Outputs
 
 Usage
 -----
-
+    python src/evaluate_hardness_buckets_fixed.py
 """
 
 import os, json
@@ -256,8 +256,8 @@ def main():
     print("Saved: results/hardness_buckets_fixed.json")
 
     # Plot both tracks
-    plot_track(df, "standard",   "figures/f1_hardness_standard.png")
-    plot_track(df, "simplified", "figures/f1_hardness_simplified.png")
+    plot_track(df, "standard",   "figures/f1_hardness_standard_fixed.png")
+    plot_track(df, "simplified", "figures/f1_hardness_simplified_fixed.png")
 
     # ── Sanity check ─────────────────────────────────────────────────────────
     print("\n── Sanity check: P0 bucket F1 values ──")
