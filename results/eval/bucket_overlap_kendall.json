@@ -1,0 +1,126 @@
+{
+  "word_tfidf_lr": {
+    "margin_self_word__vs__margin_self_char": {
+      "tau": 0.5822,
+      "pvalue": 9.248456449963043e-18
+    },
+    "margin_self_word__vs__margin_cross": {
+      "tau": 0.5822,
+      "pvalue": 9.248456449963043e-18
+    },
+    "margin_self_word__vs__readability_fk": {
+      "tau": -0.0028,
+      "pvalue": 0.9667429280633281
+    },
+    "margin_self_word__vs__length": {
+      "tau": -0.08,
+      "pvalue": 0.24159710360624098
+    },
+    "margin_self_word__vs__ttr": {
+      "tau": -0.0582,
+      "pvalue": 0.39105524474658315
+    },
+    "margin_self_char__vs__margin_cross": {
+      "tau": 1.0,
+      "pvalue": 2.143020576250934e-158
+    },
+    "margin_self_char__vs__readability_fk": {
+      "tau": 0.0061,
+      "pvalue": 0.9288089213890894
+    },
+    "margin_self_char__vs__length": {
+      "tau": -0.0519,
+      "pvalue": 0.447367051535831
+    },
+    "margin_self_char__vs__ttr": {
+      "tau": -0.0323,
+      "pvalue": 0.6337161330922374
+    },
+    "margin_cross__vs__readability_fk": {
+      "tau": 0.0061,
+      "pvalue": 0.9288089213890894
+    },
+    "margin_cross__vs__length": {
+      "tau": -0.0519,
+      "pvalue": 0.447367051535831
+    },
+    "margin_cross__vs__ttr": {
+      "tau": -0.0323,
+      "pvalue": 0.6337161330922374
+    },
+    "readability_fk__vs__length": {
+      "tau": 0.1273,
+      "pvalue": 0.06256307306105073
+    },
+    "readability_fk__vs__ttr": {
+      "tau": -0.0982,
+      "pvalue": 0.14779119707239705
+    },
+    "length__vs__ttr": {
+      "tau": -0.2804,
+      "pvalue": 4.0779213241193106e-05
+    }
+  },
+  "char_tfidf_lr": {
+    "margin_self_word__vs__margin_self_char": {
+      "tau": 0.5822,
+      "pvalue": 9.248456449963043e-18
+    },
+    "margin_self_word__vs__margin_cross": {
+      "tau": 1.0,
+      "pvalue": 2.143020576250934e-158
+    },
+    "margin_self_word__vs__readability_fk": {
+      "tau": -0.0028,
+      "pvalue": 0.9667429280633281
+    },
+    "margin_self_word__vs__length": {
+      "tau": -0.08,
+      "pvalue": 0.24159710360624098
+    },
+    "margin_self_word__vs__ttr": {
+      "tau": -0.0582,
+      "pvalue": 0.39105524474658315
+    },
+    "margin_self_char__vs__margin_cross": {
+      "tau": 0.5822,
+      "pvalue": 9.248456449963043e-18
+    },
+    "margin_self_char__vs__readability_fk": {
+      "tau": 0.0061,
+      "pvalue": 0.9288089213890894
+    },
+    "margin_self_char__vs__length": {
+      "tau": -0.0519,
+      "pvalue": 0.447367051535831
+    },
+    "margin_self_char__vs__ttr": {
+      "tau": -0.0323,
+      "pvalue": 0.6337161330922374
+    },
+    "margin_cross__vs__readability_fk": {
+      "tau": -0.0028,
+      "pvalue": 0.9667429280633281
+    },
+    "margin_cross__vs__length": {
+      "tau": -0.08,
+      "pvalue": 0.24159710360624098
+    },
+    "margin_cross__vs__ttr": {
+      "tau": -0.0582,
+      "pvalue": 0.39105524474658315
+    },
+    "readability_fk__vs__length": {
+      "tau": 0.1273,
+      "pvalue": 0.06256307306105073
+    },
+    "readability_fk__vs__ttr": {
+      "tau": -0.0982,
+      "pvalue": 0.14779119707239705
+    },
+    "length__vs__ttr": {
+      "tau": -0.2804,
+      "pvalue": 4.0779213241193106e-05
+    }
+  }
+}

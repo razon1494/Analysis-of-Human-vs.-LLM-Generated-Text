@@ -1,0 +1,5 @@
+split,n_total,n_unchanged,pct_unchanged,n_low_change_jaccard_gt_0.85,pct_low_change,jaccard_min,jaccard_median,jaccard_mean,jaccard_max,len_delta_median,len_delta_mean,len_delta_min,len_delta_max
+P1_test_standard,100,0,0.0,21,21.0,0.3893,0.7616,0.7227,0.9684,-14,-13.29,-53,26
+P2_test_standard,100,0,0.0,7,7.0,0.2483,0.7186,0.6669,0.9327,-13,-14.98,-59,28
+P1_test_simplified,100,0,0.0,0,0.0,0.1349,0.4536,0.453,0.7,-17,-15.38,-64,27
+P2_test_simplified,100,0,0.0,0,0.0,0.125,0.4102,0.4098,0.6667,-21,-18.49,-68,24

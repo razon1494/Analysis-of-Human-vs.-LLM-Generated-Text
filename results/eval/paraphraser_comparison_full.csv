@@ -1,0 +1,9 @@
+detector,paraphraser,p2_hard_f1
+word_tfidf_lr,Mistral-7B (simplified),0.7368
+word_tfidf_lr,Mistral-7B (standard),0.7727
+char_tfidf_lr,Mistral-7B (simplified),0.6471
+char_tfidf_lr,Mistral-7B (standard),0.8261
+word_tfidf_lr,NLLB back-translation,0.7027
+char_tfidf_lr,NLLB back-translation,0.4828
+word_tfidf_lr,Llama-3.1-8B (simplified),0.6806998556998557
+char_tfidf_lr,Llama-3.1-8B (simplified),0.3358974358974359

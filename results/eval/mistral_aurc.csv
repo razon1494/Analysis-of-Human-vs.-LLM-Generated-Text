@@ -1,0 +1,13 @@
+detector,track,metric,aurc
+word_tfidf_lr,mistral_standard,acc,0.785
+word_tfidf_lr,mistral_standard,f1,0.8217
+word_tfidf_lr,mistral_standard,auroc,0.8731
+word_tfidf_lr,mistral_simplified,acc,0.77
+word_tfidf_lr,mistral_simplified,f1,0.787
+word_tfidf_lr,mistral_simplified,auroc,0.8594
+char_tfidf_lr,mistral_standard,acc,0.87
+char_tfidf_lr,mistral_standard,f1,0.8973
+char_tfidf_lr,mistral_standard,auroc,0.8978
+char_tfidf_lr,mistral_simplified,acc,0.72
+char_tfidf_lr,mistral_simplified,f1,0.7083
+char_tfidf_lr,mistral_simplified,auroc,0.85

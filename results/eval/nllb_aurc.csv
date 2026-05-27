@@ -1,0 +1,7 @@
+detector,metric,aurc
+word_tfidf_lr,acc,0.745
+word_tfidf_lr,f1,0.7603
+word_tfidf_lr,auroc,0.8712
+char_tfidf_lr,acc,0.685
+char_tfidf_lr,f1,0.635
+char_tfidf_lr,auroc,0.8417

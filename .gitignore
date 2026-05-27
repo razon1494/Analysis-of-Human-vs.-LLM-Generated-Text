@@ -33,3 +33,6 @@ data/raw_llm/
 # Optional: if you want results not tracked
 # results/
 # figures/
+
+# Local virtual environment (non-standard name)
+.venv312/
