@@ -71,6 +71,11 @@ $n$-grams (\texttt{`comp'}, \texttt{`can'}, \texttt{`it'}).
 Mean LLM word length collapses from 5.36 to 4.71 characters, while human word
 length drops in parallel, homogenising the character signature that the
 detector relied upon.
+An embedding analysis (SBERT~+~UMAP) confirms the asymmetry:
+the Human/LLM centroid cosine-distance in the Hard bucket erodes by only
+21\% across paraphrase rounds, while char-TF-IDF $F_1$ erodes by 64\% — the
+signal is still present in deep representations, only the surface encoding
+collapses.
 We argue that hardness-stratified evaluation, paraphraser diversity, and
 flip-level attribution should be standard practice for detection robustness studies.
 
@@ -590,6 +595,93 @@ We read this as a clean mechanistic story:
 LLM and human writing at the character level; simplified paraphrasing erases
 that gap; the detector loses its cues; LLM texts in the Hard bucket cross the
 decision boundary into the human region.}
+
+\FloatBarrier
+\subsection{A concrete flip example}
+\label{sec:concrete_flip}
+
+To make the mechanism tangible, Table~\ref{tab:concrete_example} shows one
+representative Hard-bucket flip case in full: an LLM-generated paragraph
+about botany that the char-TF-IDF detector identifies as LLM at P0
+(probability 0.858), correctly, then fails to identify at P2 (probability
+0.410), incorrectly. The two-round simplified paraphrase reduces mean word
+length from 6.28 to 4.81 characters (a 23\% drop) and replaces academic
+vocabulary—\emph{encompasses, disciplines, morphology, biochemistry,
+systematics, photosynthesis}—with everyday alternatives—\emph{looks at,
+make babies, tiny building blocks}. The semantic content is preserved
+but the character-$n$-gram signature is destroyed.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{0.95\linewidth}}
+\toprule
+\textbf{P0 (Llama-3.1-8B original).} char-TF-IDF
+$P(\mathrm{LLM})=\mathbf{0.858}$; mean word length 6.28; 151 words. \\
+\midrule
+\emph{Botany is the scientific study of plants, including their structure,
+growth, development, reproduction, metabolism, evolution, and classification.
+It encompasses a wide range of disciplines, from plant anatomy and morphology
+to physiology, biochemistry, genetics, ecology, and systematics. Botanists
+investigate various aspects of plant biology, such as photosynthesis,
+respiration, nutrient uptake, and response to environmental stimuli. They
+also study the diversity of plant species, including their classification,
+distribution, and interactions with other organisms in ecosystems\ldots} \\
+\midrule
+\textbf{P2 (after 2 rounds of simplified paraphrasing).} char-TF-IDF
+$P(\mathrm{LLM})=\mathbf{0.410}$; mean word length 4.81; 113 words. \\
+\midrule
+\emph{The study of plants is called botany. It's a science that looks at
+how plants grow, develop, and make babies. Botany also studies how plants
+make their own food and how they react to their surroundings. Botanists
+examine the different parts of plants, like their tiny building blocks,
+and how they work together. They also study the many different types of
+plants and where they can be found\ldots} \\
+\bottomrule
+\end{tabular}
+\caption{One Hard-bucket flip case in full. The 0.448 drop in
+$P(\mathrm{LLM})$ co-occurs with a 23\% drop in mean word length and a
+wholesale lexical substitution of formal academic terms for everyday
+language. The semantic content (what botany is, what botanists do) is
+preserved; the character-level register signal that the detector relied
+on is not.}
+\label{tab:concrete_example}
+\end{table}
+
+\FloatBarrier
+\subsection{The signal is preserved in embeddings — only surface features collapse}
+\label{sec:embedding_projection}
+
+The flip example above suggests semantic content survives paraphrasing while
+the surface signature does not. We verify this directly with embedding
+analysis. For every Hard-bucket text at P0, P1-simplified, and P2-simplified
+we compute an SBERT representation (\texttt{all-mpnet-base-v2}, 768-D) and
+project the joint set into 2-D with UMAP (Fig.~\ref{fig:umap_hard}).
+
+In the original 768-D space, the cosine distance between Human and LLM
+centroids in the Hard bucket is $0.605$ at P0, $0.511$ at P1, and
+$0.479$ at P2 — a 21\% reduction.
+Meanwhile, in the same examples, char-TF-IDF Hard $F_1$ drops 64\%
+(0.923 $\to$ 0.336) and RoBERTa Hard $F_1$ drops only 8\% (1.000 $\to$ 0.920).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\linewidth]{fig23_umap_hard_bucket.png}
+\caption{UMAP projection of SBERT embeddings (Hard bucket, 12 Human / 22
+LLM). Class separability erodes only modestly across paraphrase rounds: the
+SBERT centroid cosine-distance shrinks by 21\%, far less than char-TF-IDF's
+64\% $F_1$ drop on the same examples. The signal char-TF-IDF loses is still
+present in embeddings — which is why RoBERTa-base remains robust on the same
+texts.}
+\label{fig:umap_hard}
+\end{figure}
+
+This is the missing piece that ties \S\ref{sec:detector_family} to
+\S\ref{sec:mechanism}: \textbf{the simplified-paraphrase attack does not
+destroy the information needed to distinguish Human from LLM — it destroys
+only the specific surface-feature encoding that char-TF-IDF relies on}.
+Detectors with access to deeper representations (RoBERTa) keep most of their
+discriminative power; detectors restricted to character $n$-grams do not.
 
 % =============================================================================
 \section{Calibration Under Distribution Shift}
