@@ -1,0 +1,121 @@
+stage,rank,feature,mean_weight,coef,llm_positive,detector
+P0,1,ludi,0.008382,0.779392,True,char_tfidf_lr
+P0,2,ludin,0.008382,0.779392,True,char_tfidf_lr
+P0,3,cludi,0.008382,0.779392,True,char_tfidf_lr
+P0,4,uding,0.008367,0.773889,True,char_tfidf_lr
+P0,5,udin,0.008367,0.773889,True,char_tfidf_lr
+P0,6, incl,0.00946,0.711186,True,char_tfidf_lr
+P0,7,inclu,0.00946,0.711186,True,char_tfidf_lr
+P0,8,incl,0.00946,0.711186,True,char_tfidf_lr
+P0,9,nclud,0.010002,0.70793,True,char_tfidf_lr
+P0,10,clud,0.009986,0.702975,True,char_tfidf_lr
+P0,11,lud,0.00997,0.697013,True,char_tfidf_lr
+P0,12,udi,0.009173,0.695547,True,char_tfidf_lr
+P0,13,ncl,0.010411,0.692841,True,char_tfidf_lr
+P0,14,nclu,0.009906,0.689489,True,char_tfidf_lr
+P0,15, var,0.011656,0.671211,True,char_tfidf_lr
+P0,16,ariou,0.010217,0.657919,True,char_tfidf_lr
+P0,17,vario,0.010217,0.657919,True,char_tfidf_lr
+P0,18,rious,0.010302,0.649665,True,char_tfidf_lr
+P0,19,riou,0.010302,0.649665,True,char_tfidf_lr
+P0,20,clu,0.009657,0.639753,True,char_tfidf_lr
+P1_simplified,1,ludi,0.002689,0.779392,True,char_tfidf_lr
+P1_simplified,2,ludin,0.002689,0.779392,True,char_tfidf_lr
+P1_simplified,3,cludi,0.002689,0.779392,True,char_tfidf_lr
+P1_simplified,4,uding,0.002684,0.773889,True,char_tfidf_lr
+P1_simplified,5,udin,0.002684,0.773889,True,char_tfidf_lr
+P1_simplified,6, incl,0.003359,0.711186,True,char_tfidf_lr
+P1_simplified,7,inclu,0.003359,0.711186,True,char_tfidf_lr
+P1_simplified,8,incl,0.003359,0.711186,True,char_tfidf_lr
+P1_simplified,9,nclud,0.003364,0.70793,True,char_tfidf_lr
+P1_simplified,10,clud,0.003359,0.702975,True,char_tfidf_lr
+P1_simplified,11,lud,0.003354,0.697013,True,char_tfidf_lr
+P1_simplified,12,udi,0.003607,0.695547,True,char_tfidf_lr
+P1_simplified,13,ncl,0.003311,0.692841,True,char_tfidf_lr
+P1_simplified,14,nclu,0.003332,0.689489,True,char_tfidf_lr
+P1_simplified,15, var,0.002232,0.671211,True,char_tfidf_lr
+P1_simplified,16,ariou,0.001641,0.657919,True,char_tfidf_lr
+P1_simplified,17,vario,0.001641,0.657919,True,char_tfidf_lr
+P1_simplified,18,rious,0.001608,0.649665,True,char_tfidf_lr
+P1_simplified,19,riou,0.001608,0.649665,True,char_tfidf_lr
+P1_simplified,20,clu,0.003248,0.639753,True,char_tfidf_lr
+P2_simplified,1,ludi,0.002164,0.779392,True,char_tfidf_lr
+P2_simplified,2,ludin,0.002164,0.779392,True,char_tfidf_lr
+P2_simplified,3,cludi,0.002164,0.779392,True,char_tfidf_lr
+P2_simplified,4,uding,0.00216,0.773889,True,char_tfidf_lr
+P2_simplified,5,udin,0.00216,0.773889,True,char_tfidf_lr
+P2_simplified,6, incl,0.002542,0.711186,True,char_tfidf_lr
+P2_simplified,7,inclu,0.002542,0.711186,True,char_tfidf_lr
+P2_simplified,8,incl,0.002542,0.711186,True,char_tfidf_lr
+P2_simplified,9,nclud,0.002546,0.70793,True,char_tfidf_lr
+P2_simplified,10,clud,0.002542,0.702975,True,char_tfidf_lr
+P2_simplified,11,lud,0.002538,0.697013,True,char_tfidf_lr
+P2_simplified,12,udi,0.003869,0.695547,True,char_tfidf_lr
+P2_simplified,13,ncl,0.002505,0.692841,True,char_tfidf_lr
+P2_simplified,14,nclu,0.002521,0.689489,True,char_tfidf_lr
+P2_simplified,15, var,0.001564,0.671211,True,char_tfidf_lr
+P2_simplified,16,ariou,0.001736,0.657919,True,char_tfidf_lr
+P2_simplified,17,vario,0.001736,0.657919,True,char_tfidf_lr
+P2_simplified,18,rious,0.001702,0.649665,True,char_tfidf_lr
+P2_simplified,19,riou,0.001702,0.649665,True,char_tfidf_lr
+P2_simplified,20,clu,0.002458,0.639753,True,char_tfidf_lr
+P0,1,and,0.092465,2.771002,True,word_tfidf_lr
+P0,2,including,0.021675,1.937197,True,word_tfidf_lr
+P0,3,its,0.02251,1.704503,True,word_tfidf_lr
+P0,4,various,0.02487,1.602704,True,word_tfidf_lr
+P0,5,has,0.022825,1.34909,True,word_tfidf_lr
+P0,6,is,0.038985,1.340072,True,word_tfidf_lr
+P0,7,the,0.128716,-1.294165,False,word_tfidf_lr
+P0,8,not,0.006675,-1.263557,False,word_tfidf_lr
+P0,9,significant,0.017879,1.212207,True,word_tfidf_lr
+P0,10,were,0.0,-1.143146,False,word_tfidf_lr
+P0,11,such as,0.015727,1.131303,True,word_tfidf_lr
+P0,12,of the,0.025515,-0.974451,False,word_tfidf_lr
+P0,13,often,0.009146,0.889491,True,word_tfidf_lr
+P0,14,country,0.011219,0.883276,True,word_tfidf_lr
+P0,15,such,0.015215,0.883139,True,word_tfidf_lr
+P0,16,born,0.007821,0.870651,True,word_tfidf_lr
+P0,17,can,0.025298,0.838494,True,word_tfidf_lr
+P0,18,through,0.012005,0.816866,True,word_tfidf_lr
+P0,19,there,0.004552,-0.813568,False,word_tfidf_lr
+P0,20,over,0.006206,0.79708,True,word_tfidf_lr
+P1_simplified,1,and,0.084348,2.771002,True,word_tfidf_lr
+P1_simplified,2,including,0.006112,1.937197,True,word_tfidf_lr
+P1_simplified,3,its,0.010919,1.704503,True,word_tfidf_lr
+P1_simplified,4,various,0.003447,1.602704,True,word_tfidf_lr
+P1_simplified,5,has,0.018116,1.34909,True,word_tfidf_lr
+P1_simplified,6,is,0.041934,1.340072,True,word_tfidf_lr
+P1_simplified,7,the,0.101093,-1.294165,False,word_tfidf_lr
+P1_simplified,8,not,0.005789,-1.263557,False,word_tfidf_lr
+P1_simplified,9,significant,0.0,1.212207,True,word_tfidf_lr
+P1_simplified,10,were,0.001471,-1.143146,False,word_tfidf_lr
+P1_simplified,11,such as,0.009138,1.131303,True,word_tfidf_lr
+P1_simplified,12,of the,0.011586,-0.974451,False,word_tfidf_lr
+P1_simplified,13,often,0.00797,0.889491,True,word_tfidf_lr
+P1_simplified,14,country,0.014399,0.883276,True,word_tfidf_lr
+P1_simplified,15,such,0.008841,0.883139,True,word_tfidf_lr
+P1_simplified,16,born,0.008631,0.870651,True,word_tfidf_lr
+P1_simplified,17,can,0.038132,0.838494,True,word_tfidf_lr
+P1_simplified,18,through,0.006501,0.816866,True,word_tfidf_lr
+P1_simplified,19,there,0.007492,-0.813568,False,word_tfidf_lr
+P1_simplified,20,over,0.009041,0.79708,True,word_tfidf_lr
+P2_simplified,1,and,0.084355,2.771002,True,word_tfidf_lr
+P2_simplified,2,including,0.004731,1.937197,True,word_tfidf_lr
+P2_simplified,3,its,0.008459,1.704503,True,word_tfidf_lr
+P2_simplified,4,various,0.003528,1.602704,True,word_tfidf_lr
+P2_simplified,5,has,0.015095,1.34909,True,word_tfidf_lr
+P2_simplified,6,is,0.040978,1.340072,True,word_tfidf_lr
+P2_simplified,7,the,0.095544,-1.294165,False,word_tfidf_lr
+P2_simplified,8,not,0.004062,-1.263557,False,word_tfidf_lr
+P2_simplified,9,significant,0.004119,1.212207,True,word_tfidf_lr
+P2_simplified,10,were,0.0,-1.143146,False,word_tfidf_lr
+P2_simplified,11,such as,0.009751,1.131303,True,word_tfidf_lr
+P2_simplified,12,of the,0.012016,-0.974451,False,word_tfidf_lr
+P2_simplified,13,often,0.008067,0.889491,True,word_tfidf_lr
+P2_simplified,14,country,0.017181,0.883276,True,word_tfidf_lr
+P2_simplified,15,such,0.009434,0.883139,True,word_tfidf_lr
+P2_simplified,16,born,0.008773,0.870651,True,word_tfidf_lr
+P2_simplified,17,can,0.043636,0.838494,True,word_tfidf_lr
+P2_simplified,18,through,0.008132,0.816866,True,word_tfidf_lr
+P2_simplified,19,there,0.007617,-0.813568,False,word_tfidf_lr
+P2_simplified,20,over,0.008873,0.79708,True,word_tfidf_lr
