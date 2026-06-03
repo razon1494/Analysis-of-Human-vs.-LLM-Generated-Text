@@ -224,3 +224,28 @@ def all_text_based_hardness(texts: list[str]) -> dict[str, HardnessAssignment]:
         "length":         hardness_length(texts),
         "ttr":            hardness_lexical(texts),
     }
+
+
+# ── perplexity-based hardness (GPT-2) ────────────────────────────────────────
+
+
+def hardness_perplexity(
+    scores: np.ndarray,
+    high_is_hard: bool = True,
+) -> HardnessAssignment:
+    """Bucket a pre-computed perplexity vector into tertiles.
+
+    Perplexity is expensive to compute (requires a forward pass through a
+    language model) so we keep it out of this module's compute path. The
+    caller pre-computes perplexity scores (e.g., GPT-2) on the reference
+    split and passes them in.
+
+    Convention: HIGH perplexity = the LM finds the text unusual = HARD.
+    Set high_is_hard=False if you want the opposite assignment.
+    """
+    s = np.asarray(scores, dtype=float)
+    if np.isnan(s).any():
+        med = np.nanmedian(s)
+        s = np.where(np.isnan(s), med, s)
+    buckets, cutoffs = assign_tertiles(s, hard_is_high=high_is_hard)
+    return HardnessAssignment("perplexity_gpt2", s, buckets, cutoffs)

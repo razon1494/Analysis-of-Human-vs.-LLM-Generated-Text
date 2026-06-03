@@ -217,22 +217,27 @@ We run 3 seeds (42, 123, 456) and report mean $\pm$ 95\% CI.
 
 \subsection{Hardness definitions}
 We define example hardness on the \emph{P0 (original) text only}, before any
-paraphrasing or scoring, to avoid circularity. We use three text-level
-definitions, all computable from the text alone without any detector:
+paraphrasing or scoring, to avoid circularity. We use four definitions, all
+independent of the evaluated detector:
 
 \begin{itemize}
 \item \textbf{readability\_fk}: Flesch-Kincaid grade level (primary).
 \item \textbf{ttr}: type-token ratio.
 \item \textbf{length}: character count.
+\item \textbf{perplexity\_gpt2}: per-text GPT-2 perplexity. We sort by
+$\mathrm{PPL}$ and place the lowest tertile in the Hard bucket — these are
+the texts a public, small LM rates as most LM-typical, i.e.\ the texts a
+TF-IDF detector ought to be most confident on. They are also predominantly
+LLM (median PPL: 11.8 LLM vs.\ 34.0 Human).
 \end{itemize}
 
 Each definition partitions the 100 test examples into Easy/Medium/Hard
-tertiles ($n \approx 33$ each). Bucket assignments under the three
-definitions are weakly correlated (pairwise Kendall $\tau$
-between $-0.28$ and $0.13$; Fig.~\ref{fig:concordance}), meaning different
-examples end up in each definition's Hard bucket. Nevertheless, the
-\emph{Hard-bucket $F_1$ collapse pattern} reproduces under each definition
-(Fig.~\ref{fig:fig09_multiseed}): whatever subset is flagged as Hard, the
+tertiles ($n \approx 33$ each). Bucket assignments are weakly correlated
+across the four signals (pairwise Kendall $\tau$ in $[-0.47, 0.19]$;
+Fig.~\ref{fig:concordance}), meaning different examples end up in each
+definition's Hard bucket. Nevertheless, the \emph{Hard-bucket $F_1$ collapse
+pattern} reproduces under each definition (Fig.~\ref{fig:fig09_multiseed}
+and Table~\ref{tab:ppl_collapse}): whatever subset is flagged as Hard, the
 relative drop in detector $F_1$ inside that subset is consistent.
 We use \texttt{readability\_fk} as the primary stratification because it
 has the clearest linguistic interpretation and is stable across runs.
@@ -340,14 +345,54 @@ $0.13$; Fig.~\ref{fig:concordance}), the Hard-bucket $F_1$ collapse appears
 in all three — the detector degrades on whichever subset each definition
 flags as Hard (multi-seed grid, Fig.~\ref{fig:fig09_multiseed}).
 
+\paragraph{Robustness to the choice of hardness signal: GPT-2 perplexity.}
+Because the three text-only signals are all surface lexical/syntactic
+features, a reviewer can reasonably ask whether the collapse is just an
+artifact of \emph{lexical formality}. We test this with a fourth, structurally
+different hardness signal: per-text perplexity under GPT-2-base. The
+``Hard'' bucket here is the low-perplexity tertile — the texts a public LM
+considers LM-typical (median 11.8 vs.\ 34.0 for the rest of the test set).
+This selects a largely different 34 examples (Kendall $\tau$ vs.\
+\texttt{readability\_fk} is $0.13$, p\,$=\,0.13$), yet the collapse
+reproduces with comparable magnitude (Table~\ref{tab:ppl_collapse}):
+char-TF-IDF $F_1$ drops $0.970 \!\to\! 0.522$ ($\Delta = -0.448$) and
+word-TF-IDF $F_1$ drops $0.921 \!\to\! 0.786$ ($\Delta = -0.135$).
+The Hard-bucket collapse is therefore not specific to any one definition of
+hardness.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Detector} & \textbf{P0 Hard $F_1$} & \textbf{P2-sim Hard $F_1$} & $\Delta$ \\
+\midrule
+\multicolumn{4}{l}{\emph{Hardness = GPT-2 perplexity (low-PPL tertile = Hard)}} \\
+char\_tfidf\_lr & 0.970 & 0.522 & $\mathbf{-0.448}$ \\
+word\_tfidf\_lr & 0.921 & 0.786 & $-0.135$ \\
+\midrule
+\multicolumn{4}{l}{\emph{Hardness = readability\_fk (primary, for reference)}} \\
+char\_tfidf\_lr & 0.923 & 0.336 & $\mathbf{-0.587}$ \\
+word\_tfidf\_lr & 0.882 & 0.681 & $-0.201$ \\
+\bottomrule
+\end{tabular}
+\caption{Hard-bucket $F_1$ under perplexity-based hardness reproduces the
+collapse at comparable magnitude to readability-based hardness, despite
+selecting a largely different subset of examples (Kendall $\tau = 0.13$ between
+the two bucket assignments).}
+\label{tab:ppl_collapse}
+\end{table}
+
 \begin{figure}[htbp]
 \centering
 \begin{subfigure}[t]{0.38\linewidth}
   \centering
   \includegraphics[width=\linewidth]{fig03_hardness_concordance_heatmap.png}
-  \caption{Bucket-assignment concordance (Kendall $\tau$). Assignments are
-  weakly correlated ($\tau$ between $-0.28$ and $0.13$), yet the collapse
-  reproduces under all three—not an artifact of one definition.}
+  \caption{Bucket-assignment concordance (Kendall $\tau$) across the three
+  text-only definitions (perplexity hardness, added separately, is also
+  weakly correlated: $|\tau|\!\le\!0.19$ vs.\ readability/TTR; $\tau\!=\!-0.47$
+  vs.\ length, by construction). Bucket assignments diverge, yet the
+  collapse reproduces under all four.}
   \label{fig:concordance}
 \end{subfigure}
 \hfill
