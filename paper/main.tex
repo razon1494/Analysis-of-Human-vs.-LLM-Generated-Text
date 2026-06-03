@@ -1,12 +1,17 @@
 % =============================================================================
 %  Hardness-Aware Robustness of LLM-Text Detection Under Iterative Paraphrasing
-%  Workshop paper draft v1.
+%  ACL-formatted paper, single-column (= "preprint" style on ACL template).
+%  For double-blind submission, replace \usepackage{acl} with
+%  \usepackage[review]{acl}.
 % =============================================================================
-\documentclass[11pt,a4paper]{article}
+\documentclass[11pt]{article}
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
+\usepackage{acl}                 % ACL 2023+ style file (provides margins,
+                                 % fonts, references, theorem env, etc.)
+\usepackage{times}
+\usepackage{latexsym}
 \usepackage{microtype}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
@@ -15,19 +20,15 @@
 \usepackage{xcolor}
 \usepackage{url}
 \usepackage{hyperref}
-\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
-\usepackage[round,authoryear]{natbib}
-\usepackage{titlesec}
-\titleformat*{\section}{\large\bfseries}
-\titleformat*{\subsection}{\normalsize\bfseries}
-\usepackage[section]{placeins}  % keeps floats within their own section
-\usepackage{subcaption}         % for side-by-side figures
-\usepackage{float}              % provides [H] placement specifier
+\usepackage[section]{placeins}   % keeps floats within their own section
+\usepackage{subcaption}          % for side-by-side figures
+\usepackage{float}               % provides [H] placement specifier
+\usepackage{inconsolata}
 
 % ── Tighten float spacing so figures don't leave large gaps ──────────────────
-\setlength{\textfloatsep}{10pt plus 2pt minus 4pt}
-\setlength{\floatsep}{8pt plus 2pt minus 2pt}
-\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{8pt plus 2pt minus 4pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
 \renewcommand{\topfraction}{0.85}
 \renewcommand{\bottomfraction}{0.70}
 \renewcommand{\textfraction}{0.10}
@@ -35,11 +36,12 @@
 
 \graphicspath{{figures/}{../figures/}}
 
-\title{\textbf{Hardness-Aware Robustness of LLM-Text Detection \\ Under Iterative Paraphrasing: A Mechanistic Analysis}}
+\title{Hardness-Aware Robustness of LLM-Text Detection \\
+       Under Iterative Paraphrasing: A Mechanistic Analysis}
 
-\author{Mohammad Arifur Rahman \\ Anderson University \\ \texttt{rahman.arif.cse@gmail.com}}
-
-\date{}
+\author{Mohammad Arifur Rahman \\
+        Anderson University \\
+        \texttt{rahman.arif.cse@gmail.com}}
 
 \begin{document}
 \maketitle
@@ -47,35 +49,25 @@
 % =============================================================================
 \begin{abstract}
 We study the robustness of LLM-text detectors under iterative paraphrasing
-attacks, with a focus on how degradation is distributed across examples of
-different hardness rather than reported only as aggregate accuracy. On a
-1{,}000-paragraph human-vs-Llama-3.1-8B benchmark we make four contributions.
-\textbf{(1) Hardness-specific collapse.} Under a ``simplified'' paraphrase prompt,
-a character-$n$-gram TF-IDF detector loses
-$\Delta F_1 = -0.587$ in the Hard tertile (readability) after two rounds of
-paraphrasing (0.923\,$\to$\,0.336, 95\% CI [0.308, 0.370]),
-while RoBERTa-base loses only $\Delta F_1 = -0.080$.
-\textbf{(2) Paraphraser diversity.} The same Hard-bucket collapse reproduces
-under three paraphrasers from distinct model families
-(Llama-3.1-8B, Mistral-7B, NLLB-200 back-translation), ruling out a
-single-model confound.
-\textbf{(3) Asymmetric flips.} The collapse is entirely a \emph{recall} failure:
-\emph{all} 16 char-TF-IDF flip cases (P0 correct $\to$ P2 wrong) are
-LLM texts misclassified as human (73\% of the 22 LLM examples in the Hard bucket);
-zero of the 12 human Hard examples flip.
-\textbf{(4) Mechanism.} Using exact linear SHAP attribution, only 13.1\% of the
-detector's top-20 features survive into the paraphrased text; LLM-positive
-character $n$-grams characteristic of formal vocabulary
-(\texttt{`ludin'}, \texttt{`cludi'}) are replaced by short, generic
-$n$-grams (\texttt{`comp'}, \texttt{`can'}, \texttt{`it'}).
-Mean LLM word length collapses from 5.36 to 4.71 characters, while human word
-length drops in parallel, homogenising the character signature that the
-detector relied upon.
-An embedding analysis (SBERT~+~UMAP) confirms the asymmetry:
-the Human/LLM centroid cosine-distance in the Hard bucket erodes by only
-21\% across paraphrase rounds, while char-TF-IDF $F_1$ erodes by 64\% — the
-signal is still present in deep representations, only the surface encoding
-collapses.
+attacks, asking how degradation distributes across example hardness, not
+just on aggregate. On a balanced 1{,}000-paragraph human-vs-Llama-3.1-8B
+benchmark we make four contributions.
+\textbf{(1) Hardness-specific collapse.} Under simplified paraphrasing, a
+character-$n$-gram TF-IDF detector loses
+$\Delta F_1 = -0.587$ in the Hard tertile (readability) after two rounds
+(0.923\,$\to$\,0.336); RoBERTa-base loses only $-0.080$.
+\textbf{(2) Paraphraser diversity.} The collapse reproduces under three
+paraphrasers from distinct model families (Llama-3.1-8B, Mistral-7B,
+NLLB-200 back-translation), ruling out a single-model confound.
+\textbf{(3) Asymmetric flips.} Failure is pure recall loss: all 16
+char-TF-IDF flip cases are LLM texts misclassified as human
+(73\% of LLM Hard examples); zero human Hard texts flip.
+\textbf{(4) Mechanism.} Exact linear SHAP attribution shows only 13\% of
+top features survive; formal academic $n$-grams are replaced by short generic
+ones. SBERT embedding analysis confirms the asymmetry: Human/LLM centroid
+cosine-distance shrinks 21\% across rounds while char-TF-IDF $F_1$ drops
+64\% — the signal persists in deep representations, only the surface
+encoding collapses.
 We argue that hardness-stratified evaluation, paraphraser diversity, and
 flip-level attribution should be standard practice for detection robustness studies.
 
@@ -84,13 +76,13 @@ flip-level attribution should be standard practice for detection robustness stud
 % =============================================================================
 \section{Introduction}
 
-Detectors for LLM-generated text are now deployed in academic-integrity
-systems, plagiarism workflows, and content-moderation pipelines.
-Headline numbers on public benchmarks tend to be high—95\%+ accuracy is
-routine for fine-tuned classifiers on in-distribution data—but practitioners
-have repeatedly observed that detection accuracy degrades sharply once the
-text is paraphrased, even mildly~\citep{krishna2023paraphrasing,sadasivan2023can}.
-Two questions about this degradation are under-studied:
+Detectors for LLM-generated text are deployed in academic-integrity,
+plagiarism, and content-moderation pipelines.
+Public benchmarks report high accuracy—95\%+ is routine for fine-tuned
+classifiers on in-distribution data—but practitioners observe sharp
+degradation once text is paraphrased, even
+mildly~\citep{krishna2023paraphrasing,sadasivan2023can}.
+Two questions about this degradation remain under-studied:
 
 \begin{enumerate}
 \item Does degradation hit all examples equally, or is it concentrated on a
@@ -112,32 +104,25 @@ non-expert style).
 
 \paragraph{Contributions.}
 \begin{enumerate}
-\item A \textbf{hardness-aware robustness curve} (Sec.~\ref{sec:hardness})
-showing that the Hard tertile, not the Easy one, drives nearly all
-degradation under \emph{simplified} paraphrasing.
-
-\item A \textbf{detector-family asymmetry} (Sec.~\ref{sec:detector_family}):
-char-TF-IDF collapses ($\Delta F_1 = -0.587$), word-TF-IDF degrades modestly
-($-0.201$), RoBERTa-base barely moves ($-0.080$).
-
-\item A \textbf{paraphraser-diversity ablation} (Sec.~\ref{sec:paraphraser_diversity}):
-the Hard-bucket collapse reproduces under Mistral-7B (a different LLM
-family) and under NLLB-200 (no LLM at all, just MT back-translation), ruling
-out a single-model confound.
-
-\item A \textbf{mechanistic flip analysis} (Sec.~\ref{sec:mechanism}):
-on Hard-bucket flip cases, only 13.1\% of the char-TF-IDF model's
-top-20 features by $|\beta|$ survive into the paraphrased text;
-the surviving features are short, generic
-character bigrams/trigrams; the disappearing ones are character
-fragments of formal/academic vocabulary; and \emph{all} flips are
-LLM-as-Human (recall failures), zero are Human-as-LLM (false positives).
+\item A \textbf{hardness-aware robustness curve}
+(\S\ref{sec:hardness}) localising the collapse to the Hard tertile —
+Easy and Medium examples are largely unaffected.
+\item A \textbf{detector-family asymmetry}
+(\S\ref{sec:detector_family}): char-TF-IDF collapses, word-TF-IDF degrades
+modestly, RoBERTa-base barely moves.
+\item A \textbf{paraphraser-diversity ablation}
+(\S\ref{sec:paraphraser_diversity}) reproducing the collapse under Mistral-7B
+and NLLB-200 back-translation.
+\item A \textbf{mechanistic flip analysis} (\S\ref{sec:mechanism}) tracing
+the collapse to surface-feature erosion (13\% feature survival,
+formal $\to$ generic $n$-grams, vocabulary homogenisation) and showing all
+flips are pure recall loss.
 \end{enumerate}
 
-A secondary contribution (Sec.~\ref{sec:calibration}) is that
+A secondary contribution (\S\ref{sec:calibration}) is that
 \textbf{calibration} of TF-IDF detectors does not survive distribution
 shift: a temperature fit on the validation set lowers ECE at P0 but
-\emph{increases} ECE at P2-simplified by $\sim$0.12, while RoBERTa's
+\emph{increases} it at P2-simplified by ${\sim}0.12$, while RoBERTa's
 miscalibration is large but stable across stages.
 
 % =============================================================================
@@ -254,10 +239,9 @@ multi-seed CIs are reported across $\{42, 123, 456\}$.
 \label{sec:robustness}
 
 We define the \textbf{Area Under the Robustness Curve} (AURC)
-\citep[adapted from][]{taori2020measuring} as the mean $F_1$ across the
-three rounds $\{$P0, P1, P2$\}$. A perfectly robust detector has AURC equal
-to its P0 $F_1$. We summarise standard- and simplified-track AURCs in
-Table~\ref{tab:aurc}.
+\citep[adapted from][]{taori2020measuring} as the mean $F_1$ across rounds
+$\{$P0, P1, P2$\}$; a perfectly robust detector has AURC equal to its P0
+$F_1$. Table~\ref{tab:aurc} reports standard- and simplified-track AURCs.
 
 \begin{table}[htbp]
 \centering
@@ -457,10 +441,11 @@ unrelated model families:
 multilingual MT system, not an LLM, with no instruction-tuning.
 \end{itemize}
 
-Table~\ref{tab:paraphraser_comparison} shows the Hard-tertile $F_1$ at P2
-under each paraphraser. The qualitative pattern—char-TF-IDF collapses,
-word-TF-IDF degrades modestly—survives the change of paraphraser, although
-the absolute collapse magnitude is largest under Llama-as-paraphraser.
+Table~\ref{tab:paraphraser_comparison} (visualised in Fig.~\ref{fig:fig17})
+shows the Hard-tertile $F_1$ at P2 under each paraphraser. The qualitative
+pattern—char-TF-IDF collapses, word-TF-IDF degrades modestly—survives the
+change of paraphraser, although the absolute collapse magnitude is largest
+under Llama-as-paraphraser.
 
 \begin{table}[htbp]
 \centering
@@ -538,7 +523,8 @@ Hard-bucket flip cases at P0 and at P2, selecting the top-$K{=}20$
 features by importance at each stage.
 
 The top-5 char-TF-IDF features by mean $|\text{SHAP}|$ shift dramatically
-between stages:
+between stages (Table~\ref{tab:shap_top}); the full top-20 is plotted in
+Fig.~\ref{fig:fig20}.
 
 \begin{table}[htbp]
 \centering
@@ -575,7 +561,7 @@ A direct way to test the ``surface-fragility'' hypothesis is to count
 how many of the detector's top-20 features (ranked by $|\beta|$ on the
 training set) survive into the paraphrased text. ``Survives'' means the
 $n$-gram still has a non-zero TF-IDF weight in the paraphrased version of the
-same paragraph.
+same paragraph (Table~\ref{tab:survival}, Fig.~\ref{fig:fig21}).
 
 \begin{table}[htbp]
 \centering
@@ -606,7 +592,7 @@ human rows flip.}
 \subsection{Vocabulary homogenisation}
 Why do the features disappear? Simplified paraphrasing shrinks the mean word
 length for both human and LLM texts, collapsing them onto the same lexical
-register:
+register (Table~\ref{tab:wlen}, Fig.~\ref{fig:fig22}):
 
 \begin{table}[H]
 \centering
@@ -735,7 +721,8 @@ discriminative power; detectors restricted to character $n$-grams do not.
 We also asked whether confidences output by the detectors remain usable
 across paraphrase rounds. Concretely: if we fit a temperature on the
 validation set (standard ECE calibration), does it carry over to the
-paraphrased test splits?
+paraphrased test splits? (Table~\ref{tab:calibration},
+Fig.~\ref{fig:fig18}.)
 
 \begin{table}[htbp]
 \centering
@@ -841,7 +828,7 @@ The repository includes per-experiment driver scripts under
 \texttt{data/splits/}.
 
 % =============================================================================
-\bibliographystyle{plainnat}
+\bibliographystyle{acl_natbib}
 \begin{thebibliography}{99}
 
 \bibitem[Gehrmann et~al.(2019)]{gehrmann2019gltr}
