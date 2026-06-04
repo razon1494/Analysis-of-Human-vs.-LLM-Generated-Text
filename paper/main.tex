@@ -12,6 +12,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{times}
 \usepackage{microtype}
+\usepackage{textcomp}            % for \textvisiblespace and other glyphs
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{multirow}
@@ -535,21 +536,23 @@ Fig.~\ref{fig:fig20}.
 \begin{table}[htbp]
 \centering
 \small
-\begin{tabular}{r p{2.0cm} p{2.0cm}}
+\begin{tabular}{c l l}
 \toprule
 \textbf{rank} & \textbf{P0 (correct)} & \textbf{P2-sim (wrong)} \\
 \midrule
-1 & \texttt{` var'} & \texttt{` comp'} \\
-2 & \texttt{` va'}  & \texttt{`comp'} \\
-3 & \texttt{`ludin'} & \texttt{`omp'} \\
-4 & \texttt{`cludi'} & \texttt{` it'} \\
-5 & \texttt{`ludi'}  & \texttt{`can'} \\
+1 & \texttt{`\textvisiblespace var'}   & \texttt{`\textvisiblespace comp'} \\
+2 & \texttt{`\textvisiblespace va'}    & \texttt{`comp'}                  \\
+3 & \texttt{`ludin'}                   & \texttt{`omp'}                   \\
+4 & \texttt{`cludi'}                   & \texttt{`\textvisiblespace it'}  \\
+5 & \texttt{`ludi'}                    & \texttt{`can'}                   \\
 \bottomrule
 \end{tabular}
 \caption{Top-5 char $n$-gram features by mean $|\text{SHAP}|$ on the same 16
 Hard-bucket flip cases, before and after paraphrasing.
-P0 features are fragments of formal/academic words (\emph{variables, including}); P2-simplified features
-are generic, short, everyday $n$-grams.}
+P0 features are fragments of formal/academic words (\emph{variables, including});
+P2-simplified features are generic, short, everyday $n$-grams.
+The visible-space character (\textvisiblespace) denotes a word-boundary space
+in the \texttt{char\_wb} analyser.}
 \label{tab:shap_top}
 \end{table}
 
