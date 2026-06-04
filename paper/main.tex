@@ -1,17 +1,16 @@
 % =============================================================================
 %  Hardness-Aware Robustness of LLM-Text Detection Under Iterative Paraphrasing
-%  ACL-formatted paper, single-column (= "preprint" style on ACL template).
-%  For double-blind submission, replace \usepackage{acl} with
-%  \usepackage[review]{acl}.
+%  arXiv preprint format: single column, generous margins, larger figures.
+%
+%  To convert to ACL 2-column for venue submission later: swap the documentclass
+%  block below for the ACL version (commented out at the bottom of this file).
 % =============================================================================
-\documentclass[11pt]{article}
+\documentclass[11pt,a4paper]{article}
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage{acl}                 % ACL 2023+ style file (provides margins,
-                                 % fonts, references, theorem env, etc.)
+\usepackage[margin=1in]{geometry}
 \usepackage{times}
-\usepackage{latexsym}
 \usepackage{microtype}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
@@ -20,15 +19,20 @@
 \usepackage{xcolor}
 \usepackage{url}
 \usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,
+            citecolor=blue!50!black,urlcolor=blue!50!black}
+\usepackage[round,authoryear]{natbib}
+\usepackage{titlesec}
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\normalsize\bfseries}
 \usepackage[section]{placeins}   % keeps floats within their own section
 \usepackage{subcaption}          % for side-by-side figures
 \usepackage{float}               % provides [H] placement specifier
-\usepackage{inconsolata}
 
-% ── Tighten float spacing so figures don't leave large gaps ──────────────────
-\setlength{\textfloatsep}{8pt plus 2pt minus 4pt}
-\setlength{\floatsep}{6pt plus 2pt minus 2pt}
-\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+% ── Float spacing (slightly tighter than default but room to breathe) ───────
+\setlength{\textfloatsep}{12pt plus 2pt minus 4pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
 \renewcommand{\topfraction}{0.85}
 \renewcommand{\bottomfraction}{0.70}
 \renewcommand{\textfraction}{0.10}
@@ -36,12 +40,14 @@
 
 \graphicspath{{figures/}{../figures/}}
 
-\title{Hardness-Aware Robustness of LLM-Text Detection \\
-       Under Iterative Paraphrasing: A Mechanistic Analysis}
+\title{\textbf{Hardness-Aware Robustness of LLM-Text Detection \\
+       Under Iterative Paraphrasing: A Mechanistic Analysis}}
 
 \author{Mohammad Arifur Rahman \\
         Anderson University \\
         \texttt{rahman.arif.cse@gmail.com}}
+
+\date{}
 
 \begin{document}
 \maketitle
@@ -828,7 +834,7 @@ The repository includes per-experiment driver scripts under
 \texttt{data/splits/}.
 
 % =============================================================================
-\bibliographystyle{acl_natbib}
+\bibliographystyle{plainnat}
 \begin{thebibliography}{99}
 
 \bibitem[Gehrmann et~al.(2019)]{gehrmann2019gltr}
@@ -879,3 +885,36 @@ Taori, R., Dave, A., Shankar, V., et~al.\ (2020).
 \end{thebibliography}
 
 \end{document}
+
+% =============================================================================
+%  HOW TO SWITCH TO ACL 2-COLUMN FORMAT FOR VENUE SUBMISSION (TrustNLP, EMNLP)
+% =============================================================================
+%
+%  Replace the preamble block at the top of this file with:
+%
+%    \documentclass[11pt]{article}
+%    \usepackage[T1]{fontenc}
+%    \usepackage[utf8]{inputenc}
+%    \usepackage{acl}                 % requires acl.sty in project
+%    \usepackage{times}
+%    \usepackage{latexsym}
+%    \usepackage{microtype}
+%    \usepackage{amsmath,amssymb}
+%    \usepackage{booktabs}
+%    \usepackage{multirow}
+%    \usepackage{graphicx}
+%    \usepackage{xcolor}
+%    \usepackage{url}
+%    \usepackage{hyperref}
+%    \usepackage[section]{placeins}
+%    \usepackage{subcaption}
+%    \usepackage{float}
+%    \graphicspath{{figures/}{../figures/}}
+%    \title{Hardness-Aware Robustness of LLM-Text Detection ...}
+%    \author{Mohammad Arifur Rahman \\
+%            Anderson University \\
+%            \texttt{rahman.arif.cse@gmail.com}}
+%
+%  And change \bibliographystyle{plainnat} to \bibliographystyle{acl_natbib}.
+%  For anonymous double-blind review, use \usepackage[review]{acl} instead.
+% =============================================================================
