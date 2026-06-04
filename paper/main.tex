@@ -41,8 +41,8 @@
 
 \graphicspath{{figures/}{../figures/}}
 
-\title{\textbf{Hardness-Aware Robustness of LLM-Text Detection \\
-       Under Iterative Paraphrasing: A Mechanistic Analysis}}
+\title{\textbf{Aggregate Metrics Hide Hard-Sample Collapse \\
+       in LLM-Text Detection Under Iterative Paraphrasing}}
 
 \author{Mohammad Arifur Rahman \\
         Anderson University \\
@@ -55,29 +55,27 @@
 
 % =============================================================================
 \begin{abstract}
-We study the robustness of LLM-text detectors under iterative paraphrasing
-attacks, asking how degradation distributes across example hardness, not
-just on aggregate. On a balanced 1{,}000-paragraph human-vs-Llama-3.1-8B
-benchmark we make four contributions.
-\textbf{(1) Hardness-specific collapse.} Under simplified paraphrasing, a
+Detectors for LLM-generated text routinely report high aggregate accuracy
+yet quietly fail on a predictable subset of examples. We study this hidden
+failure mode on a balanced 1{,}000-paragraph human-vs-Llama-3.1-8B
+benchmark, stratifying $F_1$ by example hardness (Flesch-Kincaid grade)
+\emph{before} any paraphrasing and tracking per-bucket trajectories across
+two iterative paraphrase rounds. Under simplified paraphrasing, a
 character-$n$-gram TF-IDF detector loses
-$\Delta F_1 = -0.587$ in the Hard tertile (readability) after two rounds
-(0.923\,$\to$\,0.336); RoBERTa-base loses only $-0.080$.
-\textbf{(2) Paraphraser diversity.} The collapse reproduces under three
-paraphrasers from distinct model families (Llama-3.1-8B, Mistral-7B,
-NLLB-200 back-translation), ruling out a single-model confound.
-\textbf{(3) Asymmetric flips.} Failure is pure recall loss: all 16
-char-TF-IDF flip cases are LLM texts misclassified as human
-(73\% of LLM Hard examples); zero human Hard texts flip.
-\textbf{(4) Mechanism.} Exact linear SHAP attribution shows only 13\% of
-top features survive; formal academic $n$-grams are replaced by short generic
-ones. SBERT embedding analysis confirms the asymmetry: Human/LLM centroid
-cosine-distance shrinks 21\% across rounds while char-TF-IDF $F_1$ drops
-64\% — the signal persists in deep representations, only the surface
-encoding collapses.
-We argue that hardness-stratified evaluation, paraphraser diversity, and
-flip-level attribution should be standard practice for detection robustness studies.
-
+$\Delta F_1 = -0.587$ in the Hard tertile (0.923\,$\to$\,0.336) while
+RoBERTa-base loses only $-0.080$: the collapse is
+detector-family-specific. The pattern reproduces under three structurally
+distinct paraphrasers (Llama-3.1-8B, Mistral-7B, NLLB-200 back-translation),
+ruling out a single-model confound. The failure is asymmetric — all 16
+char-TF-IDF flip cases are LLM-as-Human errors (73\% of LLM Hard examples),
+with zero human Hard texts flipping. Exact linear SHAP attribution shows
+only 13\% of the detector's top features survive paraphrasing; formal
+academic $n$-grams are replaced by short generic ones. SBERT embedding
+analysis confirms the diagnosis: Human/LLM cosine-distance shrinks only
+21\% across rounds while char-TF-IDF $F_1$ drops 64\% — the signal persists
+in deep representations; only the surface encoding collapses. We argue that
+hardness-stratified evaluation, paraphraser diversity, and flip-level
+attribution should be standard practice for detection robustness studies.
 \end{abstract}
 
 % =============================================================================
@@ -208,6 +206,18 @@ We run 3 seeds (42, 123, 456) and report mean $\pm$ 95\% CI.
 \end{itemize}
 
 \subsection{Hardness definitions}
+\paragraph{Why text-only hardness?}
+Defining hardness via detector uncertainty (e.g., decision-boundary margin)
+is tautological — examples near a decision boundary crossing it under
+perturbation is mathematically expected, not a property of the data. A
+reviewer-proof claim requires hardness signals the evaluated detector
+cannot directly exploit. We therefore use three intrinsic text properties
+(readability, type-token ratio, length) and one external-model probability
+(GPT-2 perplexity). Readability is our primary signal because Flesch-Kincaid
+grade level tracks syntactic complexity and vocabulary depth — both targets
+of the simplified-paraphrase prompt — while remaining invisible to a TF-IDF
+detector at the feature level.
+
 We define example hardness on the \emph{P0 (original) text only}, before any
 paraphrasing or scoring, to avoid circularity. We use four definitions, all
 independent of the evaluated detector:
@@ -431,6 +441,23 @@ We propose a feature-granularity explanation: the simplification prompt
 preserves \emph{meaning} (so transformer embeddings are stable) but
 destroys \emph{surface form} (so character and word $n$-grams are not).
 Section~\ref{sec:mechanism} provides direct evidence for this.
+
+\paragraph{Is RoBERTa's robustness real or an artifact?}
+A reasonable concern is whether RoBERTa's near-perfect Hard-bucket $F_1$
+reflects overfitting, topic leakage, or dataset simplicity rather than
+genuine robustness. Three observations argue against this. \textbf{(i)}
+Train and test paragraphs are drawn from disjoint Wikipedia articles with no
+topic-matching at the generator stage; class balance is enforced at split
+time. \textbf{(ii)} Hard-bucket RoBERTa $F_1$ is stable across three
+independent fine-tuning seeds ($1.000 \to 0.920$ at P2-simplified, CI
+$[0.865, 0.995]$), inconsistent with seed-sensitive overfitting.
+\textbf{(iii)} An independent SBERT embedding analysis
+(\S\ref{sec:embedding_projection}) shows Human/LLM cosine-separability
+erodes only 21\% across the same paraphrase rounds where char-TF-IDF $F_1$
+erodes 64\%. The most plausible reading is therefore representational, not
+spurious: RoBERTa consumes a contextual feature space the simplification
+attack cannot directly reach, while char-TF-IDF consumes exactly the surface
+encoding the attack erases.
 
 % =============================================================================
 \section{Paraphraser Diversity}
@@ -727,11 +754,13 @@ discriminative power; detectors restricted to character $n$-grams do not.
 \section{Calibration Under Distribution Shift}
 \label{sec:calibration}
 
-We also asked whether confidences output by the detectors remain usable
-across paraphrase rounds. Concretely: if we fit a temperature on the
-validation set (standard ECE calibration), does it carry over to the
-paraphrased test splits? (Table~\ref{tab:calibration},
-Fig.~\ref{fig:fig18}.)
+Paraphrasing damages a second downstream quality beyond classifier $F_1$:
+\emph{confidence calibration}. A detector that is no longer reliably
+calibrated after distribution shift cannot be safely deployed with
+confidence thresholds, even when its underlying $F_1$ is above chance. We
+test whether validation-fit temperature scaling — the standard calibration
+patch — survives the shift induced by paraphrasing
+(Table~\ref{tab:calibration}, Fig.~\ref{fig:fig18}).
 
 \begin{table}[htbp]
 \centering
