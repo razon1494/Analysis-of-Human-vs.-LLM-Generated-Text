@@ -55,27 +55,32 @@
 
 % =============================================================================
 \begin{abstract}
-Detectors for LLM-generated text routinely report high aggregate accuracy
-yet quietly fail on a predictable subset of examples. We study this hidden
-failure mode on a balanced 1{,}000-paragraph human-vs-Llama-3.1-8B
-benchmark, stratifying $F_1$ by example hardness (Flesch-Kincaid grade)
-\emph{before} any paraphrasing and tracking per-bucket trajectories across
-two iterative paraphrase rounds. Under simplified paraphrasing, a
-character-$n$-gram TF-IDF detector loses
-$\Delta F_1 = -0.587$ in the Hard tertile (0.923\,$\to$\,0.336) while
-RoBERTa-base loses only $-0.080$: the collapse is
-detector-family-specific. The pattern reproduces under three structurally
-distinct paraphrasers (Llama-3.1-8B, Mistral-7B, NLLB-200 back-translation),
-ruling out a single-model confound. The failure is asymmetric — all 16
-char-TF-IDF flip cases are LLM-as-Human errors (73\% of LLM Hard examples),
-with zero human Hard texts flipping. Exact linear SHAP attribution shows
-only 13\% of the detector's top features survive paraphrasing; formal
-academic $n$-grams are replaced by short generic ones. SBERT embedding
-analysis confirms the diagnosis: Human/LLM cosine-distance shrinks only
-21\% across rounds while char-TF-IDF $F_1$ drops 64\% — the signal persists
-in deep representations; only the surface encoding collapses. We argue that
-hardness-stratified evaluation, paraphraser diversity, and flip-level
-attribution should be standard practice for detection robustness studies.
+Detectors for LLM-generated text routinely report high accuracy on
+held-out benchmarks, but those aggregate scores can hide brittle behavior
+on the hardest examples. We examine this failure on a balanced
+1{,}000-paragraph human-vs-Llama-3.1-8B benchmark, stratifying $F_1$ by
+example hardness (Flesch-Kincaid grade) \emph{before} any paraphrasing
+and tracking per-bucket trajectories across two iterative paraphrase
+rounds. Under simplified paraphrasing, a character-$n$-gram TF-IDF
+detector loses $\Delta F_1 = -0.587$ in the Hard tertile
+(0.923\,$\to$\,0.336) while RoBERTa-base loses only $-0.080$,
+demonstrating that the collapse is detector-family-specific. The pattern
+reproduces across three structurally distinct paraphrasers
+(Llama-3.1-8B, Mistral-7B, NLLB-200 back-translation), ruling out a
+single-model confound. The failure is entirely asymmetric. All 16
+char-TF-IDF flip cases are LLM texts misclassified as human (73\% of LLM
+Hard examples), while zero human Hard texts are misclassified in the
+opposite direction. Exact linear SHAP attribution reveals that simplified
+paraphrasing erases 87\% of the detector's primary features, replacing
+formal academic character $n$-grams with short, generic substitutes that
+carry no discriminative signal. SBERT embedding analysis indicates that
+the discriminative signal between human and LLM texts is not erased by
+paraphrasing but rather obscured from surface-feature detectors: semantic
+cosine-distance diminishes by only 21\%, yet char-TF-IDF $F_1$ drops by
+64\%, confirming that the collapse is a failure of surface encoding rather
+than semantic ambiguity. We argue that hardness-stratified evaluation,
+paraphraser diversity, and flip-level attribution should be standard
+practice for detection robustness studies.
 \end{abstract}
 
 % =============================================================================
